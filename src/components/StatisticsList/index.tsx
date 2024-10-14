@@ -6,6 +6,7 @@ import { useStore } from "../../store";
 const StatisticsList: FC = () => {
   const countParents = useStore((state) => state.statistics);
   const clearItems = useStore((state) => state.clearItems);
+  const isEmty = +countParents.Родители === 0;
 
   return (
     <>
@@ -15,11 +16,7 @@ const StatisticsList: FC = () => {
           <span>{val}</span>
         </S.Main>
       ))}
-      <S.Btn
-        $count={!countParents["Родители"]}
-        onClick={clearItems}
-        disabled={!countParents["Родители"]}
-      >
+      <S.Btn $isEmty={isEmty} onClick={clearItems} disabled={isEmty}>
         Сбросить
       </S.Btn>
     </>
@@ -38,13 +35,13 @@ const S = {
     }
   `,
 
-  Btn: styled.button<{ $count?: boolean }>`
+  Btn: styled.button<{ $isEmty?: boolean }>`
     padding: 5px 10px;
     margin: 5px;
     background-color: #db7575;
     border: none;
     border-radius: 10px;
-    color: ${({ $count }) => ($count ? "white" : "inherit")};
-    cursor: ${({ $count }) => ($count ? "not-allowed" : "pointer")};
+    color: ${({ $isEmty }) => ($isEmty ? "white" : "inherit")};
+    cursor: ${({ $isEmty }) => ($isEmty ? "not-allowed" : "pointer")};
   `,
 };
