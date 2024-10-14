@@ -3,10 +3,14 @@ import { mokeDataT, childrenT } from "./App.types";
 const funcRemove = (el: mokeDataT, arr: mokeDataT[]) =>
   arr.reduce((acc: mokeDataT[], curr) => {
     if (curr.children) {
-      const filteredChildren = funcRemove(el, curr.children) as childrenT[];
-      if (filteredChildren.length) {
-        acc.push({ ...curr, children: filteredChildren });
-      }
+      const { children, ...rest } = curr;
+      const filteredChildren = funcRemove(el, children) as childrenT[];
+
+      acc.push({
+        ...(filteredChildren.length
+          ? { ...curr, children: filteredChildren }
+          : rest),
+      });
     } else if (curr.id !== el?.id) {
       acc.push(curr);
     }
@@ -71,7 +75,9 @@ const countParents = (arr: childrenT[]) => {
         res.Родители += 1;
         loop(el.children);
       } else {
-        res.Дети += 1;
+        if ((el.children && el.idParents)||(el.children || el.idParents)) {
+          res.Дети += 1;
+        }
       }
     });
   };

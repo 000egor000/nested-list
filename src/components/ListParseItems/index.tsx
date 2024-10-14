@@ -16,38 +16,36 @@ const ListParseItems: FC = () => {
     return <NoData addItem={addItems(undefined)} />;
   }
 
-  const parseItems = (el: childrenT) => {
-    return (
-      <>
-        <S.Li $children={el.children} $idParents={el?.idParents}>
-          <S.ParentS $children={el.children} $idParents={el?.idParents}>
-            {el?.id}
-          </S.ParentS>
-          <span>
-            {!(!el?.idParents || (el?.idParents && el?.children)) && (
-              <S.Btn $minus onClick={removeItems(el)}>
-                -
-              </S.Btn>
-            )}
-            {!el?.children && <S.Btn onClick={addItems(el)}>+</S.Btn>}
-          </span>
-        </S.Li>
-        {el?.children && (
-          <S.Ul ref={animationParent}>
-            {el?.children?.map((el: childrenT) => (
-              <React.Fragment key={el.id}>{parseItems(el)}</React.Fragment>
-            ))}
-            {(!el?.idParents || (el?.idParents && el?.children)) && (
-              <S.Btn onClick={addItems(el)}>+</S.Btn>
-            )}
-          </S.Ul>
-        )}
-        {!el?.idParents && el?.children && (
-          <S.Btn onClick={addItems("newParent")}>+</S.Btn>
-        )}
-      </>
-    );
-  };
+  const parseItems = (el: childrenT) => (
+    <>
+      <S.Li $children={el.children} $idParents={el?.idParents}>
+        <S.ParentS $children={el.children} $idParents={el?.idParents}>
+          {el?.id}
+        </S.ParentS>
+        <span>
+          {!(!el?.idParents || (el?.idParents && el?.children)) && (
+            <S.Btn $minus onClick={removeItems(el)}>
+              -
+            </S.Btn>
+          )}
+          {!el?.children && <S.Btn onClick={addItems(el)}>+</S.Btn>}
+        </span>
+      </S.Li>
+      {el?.children && (
+        <S.Ul ref={animationParent}>
+          {el?.children?.map((el: childrenT) => (
+            <React.Fragment key={el.id}>{parseItems(el)}</React.Fragment>
+          ))}
+          {(!el?.idParents || (el?.idParents && el?.children)) && (
+            <S.Btn onClick={addItems(el)}>+</S.Btn>
+          )}
+        </S.Ul>
+      )}
+      {(!el?.idParents || el?.children) && arrayInit?.at(-1)?.id === el.id && (
+        <S.Btn onClick={addItems("newParent")}>+</S.Btn>
+      )}
+    </>
+  );
 
   return arrayInit?.map((el: mokeDataT) => (
     <S.Ul className="parentSome" key={el?.id}>

@@ -5,8 +5,9 @@ import { useStore } from "../../store";
 
 const StatisticsList: FC = () => {
   const countParents = useStore((state) => state.statistics);
+  const mokeData = useStore((state) => state.mokeData);
   const clearItems = useStore((state) => state.clearItems);
-  const isEmty = +countParents.Родители === 0;
+  const isEmty = +countParents.Родители === 0 && !mokeData.length;
 
   return (
     <>
