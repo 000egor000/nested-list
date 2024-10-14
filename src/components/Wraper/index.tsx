@@ -1,7 +1,8 @@
 import { FC } from "react";
 import styled from "styled-components";
+
 import { WraperPropsT } from "../../App.types";
-import SettingList from "../../components/SettingList";
+import StatisticsList from "../StatisticsList";
 
 const Wraper: FC<WraperPropsT> = ({ children }) => {
   return (
@@ -11,7 +12,7 @@ const Wraper: FC<WraperPropsT> = ({ children }) => {
       </S.Header>
       <S.Main>{children}</S.Main>
       <S.Foter>
-        <SettingList />
+        <StatisticsList />
       </S.Foter>
     </>
   );
@@ -50,5 +51,6 @@ const S = {
     align-items: center;
     justify-content: center;
     box-shadow: 1px 1px 10px black;
+    gap: 10px;
   `,
 };

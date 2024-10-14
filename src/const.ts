@@ -1,4 +1,4 @@
-import { mokeDataT } from "../../App.types";
+import { mokeDataT } from "./App.types";
 
 const mokeData: mokeDataT[] = [
   {

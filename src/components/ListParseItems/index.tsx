@@ -1,28 +1,19 @@
-import React, { FC, useState } from "react";
+import React, { FC } from "react";
 import styled from "styled-components";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 import { mokeDataT, childrenT } from "../../App.types";
-import { mokeData } from "./const";
-import { handleClickAdd, handleClickRemove } from "./helpers";
-
+import { useStore } from "../../store";
 import NoData from "../NoData";
 
 const ListParseItems: FC = () => {
-  const [arrayInit, setArrayInit] = useState<mokeDataT[]>(mokeData);
   const [animationParent] = useAutoAnimate();
-
-  const addItem = (el: childrenT | "newParent" | undefined) => () => {
-    const resFunc = handleClickAdd(arrayInit, el);
-    setArrayInit(resFunc());
-  };
-  const removeItem = (el: childrenT) => () => {
-    const resFunc = handleClickRemove(arrayInit, el);
-    setArrayInit(resFunc());
-  };
+  const arrayInit = useStore((state) => state.mokeData);
+  const addItems = useStore((state) => state.addItems);
+  const removeItems = useStore((state) => state.removeItems);
 
   if (!arrayInit.length) {
-    return <NoData addItem={addItem(undefined)} />;
+    return <NoData addItem={addItems(undefined)} />;
   }
 
   const parseItems = (el: childrenT) => {
@@ -34,11 +25,11 @@ const ListParseItems: FC = () => {
           </S.ParentS>
           <span>
             {!(!el?.idParents || (el?.idParents && el?.children)) && (
-              <S.Btn $minus onClick={removeItem(el)}>
+              <S.Btn $minus onClick={removeItems(el)}>
                 -
               </S.Btn>
             )}
-            {!el?.children && <S.Btn onClick={addItem(el)}>+</S.Btn>}
+            {!el?.children && <S.Btn onClick={addItems(el)}>+</S.Btn>}
           </span>
         </S.Li>
         {el?.children && (
@@ -47,12 +38,12 @@ const ListParseItems: FC = () => {
               <React.Fragment key={el.id}>{parseItems(el)}</React.Fragment>
             ))}
             {(!el?.idParents || (el?.idParents && el?.children)) && (
-              <S.Btn onClick={addItem(el)}>+</S.Btn>
+              <S.Btn onClick={addItems(el)}>+</S.Btn>
             )}
           </S.Ul>
         )}
         {!el?.idParents && el?.children && (
-          <S.Btn onClick={addItem("newParent")}>+</S.Btn>
+          <S.Btn onClick={addItems("newParent")}>+</S.Btn>
         )}
       </>
     );

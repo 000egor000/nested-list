@@ -1,7 +1,7 @@
+import { FC } from "react";
 import styled from "styled-components";
 
 import { NoDataPropsT } from "../../App.types";
-import { FC } from "react";
 
 const NoData: FC<NoDataPropsT> = ({ addItem }) => {
   return (

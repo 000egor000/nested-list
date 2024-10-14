@@ -1,4 +1,4 @@
-import { mokeDataT, childrenT } from "../../App.types";
+import { mokeDataT, childrenT } from "./App.types";
 
 const funcRemove = (el: mokeDataT, arr: mokeDataT[]) =>
   arr.reduce((acc: mokeDataT[], curr) => {
@@ -59,9 +59,31 @@ const handleClickAdd =
     return funcMap(el, arr);
   };
 
+const countParents = (arr: childrenT[]) => {
+  const res = {
+    Родители: 0,
+    Дети: 0,
+  };
+
+  const loop = (arr: childrenT[]) => {
+    arr.forEach((el) => {
+      if (el.children) {
+        res.Родители += 1;
+        loop(el.children);
+      } else {
+        res.Дети += 1;
+      }
+    });
+  };
+
+  loop(arr);
+
+  return res;
+};
+
 const handleClickRemove =
   (arr: mokeDataT[], el: childrenT | undefined) => () => {
     return el ? funcRemove(el, arr) : arr;
   };
 
-export { handleClickAdd, handleClickRemove };
+export { handleClickAdd, handleClickRemove, countParents };
