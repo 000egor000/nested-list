@@ -58,7 +58,7 @@ export default ListParseItems;
 
 const S = {
   Ul: styled.ul`
-    border: 1px solid red;
+    border: 1px solid grey;
     list-style-type: upper-roman;
     padding: 10px;
     margin: 0;
@@ -68,8 +68,11 @@ const S = {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    border-image: linear-gradient(to right, red, green) 1;
     border-bottom: ${({ $idParents, $children }) =>
-      !$idParents || ($idParents && $children) ? "none" : "1px solid green"};
+      !$idParents || ($idParents && $children)
+        ? "none"
+        : "1px solid transparent"};
     &:last-child {
       border-bottom: none;
     }

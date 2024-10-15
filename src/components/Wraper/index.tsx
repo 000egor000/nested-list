@@ -50,6 +50,7 @@ const S = {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-wrap: wrap;
     box-shadow: 1px 1px 10px black;
     gap: 10px;
   `,

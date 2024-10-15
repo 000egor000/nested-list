@@ -24,10 +24,10 @@ const S = {
     align-items: center;
     justify-content: space-around;
   `,
-  Btn: styled.button<{ $minus?: boolean }>`
+  Btn: styled.button`
     padding: 5px 10px;
     margin: 5px;
-    background-color: ${({ $minus }) => ($minus ? "#db7575" : "#8ae78a")};
+    background-color: #8ae78a;
     cursor: pointer;
     border: none;
     border-radius: 10px;
