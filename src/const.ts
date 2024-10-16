@@ -1,5 +1,6 @@
 import { mokeDataT } from "./App.types";
 
+
 const mokeData: mokeDataT[] = [
   {
     id: "1",

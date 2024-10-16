@@ -16,7 +16,8 @@ export default NoData;
 
 const S = {
   NotData: styled.div`
-    box-shadow: 0px 5px 5px black;
+    border-image: linear-gradient(to right, red, green) 1;
+    border-bottom: 1px solid transparent;
     padding: 10px;
     margin: auto;
     text-aligh: center;

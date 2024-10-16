@@ -14,9 +14,17 @@ export type useStoreT = {
   removeItems: (el: childrenT) => () => void;
   clearItems: () => void;
 };
+
+export type useStoreThemeT = {
+  theme: boolean;
+  changeTheme: () => void;
+};
 export type initialStateT = {
   mokeData: mokeDataT[];
   statistics: statisticInitT;
+};
+export type initialStateThemeT = {
+  theme: boolean;
 };
 
 export type childrenT = {
@@ -31,3 +39,5 @@ export type NoDataPropsT = {
 export type WraperPropsT = {
   children: React.ReactNode;
 };
+
+export type initThemeT = Record<string, { title: string; svg: JSX.Element }>;

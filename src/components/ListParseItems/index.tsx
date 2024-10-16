@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 import { mokeDataT, childrenT } from "../../App.types";
-import { useStore } from "../../store";
+import { useStore, useStoreTheme } from "../../store";
 import NoData from "../NoData";
 
 const ListParseItems: FC = () => {
@@ -11,6 +11,7 @@ const ListParseItems: FC = () => {
   const arrayInit = useStore((state) => state.mokeData);
   const addItems = useStore((state) => state.addItems);
   const removeItems = useStore((state) => state.removeItems);
+  const { theme } = useStoreTheme((state) => state);
 
   if (!arrayInit.length) {
     return <NoData addItem={addItems(undefined)} />;
@@ -32,7 +33,7 @@ const ListParseItems: FC = () => {
         </span>
       </S.Li>
       {el?.children && (
-        <S.Ul ref={animationParent}>
+        <S.Ul ref={animationParent} $theme={theme}>
           {el?.children?.map((el: childrenT) => (
             <React.Fragment key={el.id}>{parseItems(el)}</React.Fragment>
           ))}
@@ -48,7 +49,7 @@ const ListParseItems: FC = () => {
   );
 
   return arrayInit?.map((el: mokeDataT) => (
-    <S.Ul className="parentSome" key={el?.id}>
+    <S.Ul $theme={theme} className="parentSome" key={el?.id}>
       {parseItems(el)}
     </S.Ul>
   ));
@@ -57,8 +58,9 @@ const ListParseItems: FC = () => {
 export default ListParseItems;
 
 const S = {
-  Ul: styled.ul`
-    border: 1px solid grey;
+  Ul: styled.ul<{ $theme?: boolean }>`
+    border: ${({ $theme }) => (!$theme ? "1px solid grey" : "1px solid white")};
+
     list-style-type: upper-roman;
     padding: 10px;
     margin: 0;

@@ -1,13 +1,13 @@
 import { create } from "zustand";
-import { mokeData } from "./const";
+import { mokeData } from "../const";
 import {
   childrenT,
   statisticInitT,
   useStoreT,
   initialStateT,
-} from "./App.types";
+} from "../App.types";
 
-import { handleClickAdd, handleClickRemove, countParents } from "./helpers";
+import { handleClickAdd, handleClickRemove, countParents } from "../helpers";
 
 const initialState: initialStateT = {
   mokeData,
@@ -32,7 +32,7 @@ const useStore = create<useStoreT>((set, get) => ({
       statistics: countParents(res) as unknown as statisticInitT,
     });
   },
-  clearItems: ()  => {
+  clearItems: () => {
     set({ mokeData: [], statistics: { Родители: "0", Дети: "0" } });
   },
 }));
