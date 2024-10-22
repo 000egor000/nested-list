@@ -13,6 +13,7 @@ export type useStoreT = {
   addItems: (el: childrenT | "newParent" | undefined) => () => void;
   removeItems: (el: childrenT) => () => void;
   clearItems: () => void;
+  updateState: (el: mokeDataT[])  => void;
 };
 
 export type useStoreThemeT = {
