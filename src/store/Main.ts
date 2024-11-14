@@ -27,6 +27,7 @@ const useStore = create<useStoreT>((set, get) => ({
 
   addItems: (el: childrenT | "newParent" | undefined) => () => {
     const res = handleClickAdd(get().mokeData, el)();
+
     get().updateState(res);
   },
 

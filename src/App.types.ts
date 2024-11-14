@@ -13,7 +13,7 @@ export type useStoreT = {
   addItems: (el: childrenT | "newParent" | undefined) => () => void;
   removeItems: (el: childrenT) => () => void;
   clearItems: () => void;
-  updateState: (el: mokeDataT[])  => void;
+  updateState: (el: mokeDataT[]) => void;
 };
 
 export type useStoreThemeT = {
@@ -42,3 +42,7 @@ export type WraperPropsT = {
 };
 
 export type initThemeT = Record<string, { title: string; svg: JSX.Element }>;
+
+export type addItemsT = (
+  flag: childrenT | "newParent" | undefined
+) => (event?: React.MouseEvent<HTMLButtonElement>) => void;

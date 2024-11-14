@@ -1,17 +1,62 @@
-import React, { FC } from "react";
+import React, { FC, useRef, useEffect } from "react";
 import styled from "styled-components";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 
-import { mokeDataT, childrenT } from "../../App.types";
+import { mokeDataT, childrenT, addItemsT } from "../../App.types";
 import { useStore, useStoreTheme } from "../../store";
 import NoData from "../NoData";
+
+const configScroll: ScrollIntoViewOptions = {
+  behavior: "smooth",
+  block: "center",
+};
 
 const ListParseItems: FC = () => {
   const [animationParent] = useAutoAnimate();
   const arrayInit = useStore((state) => state.mokeData);
-  const addItems = useStore((state) => state.addItems);
+  const addItemsFunc = useStore((state) => state.addItems);
   const removeItems = useStore((state) => state.removeItems);
   const { theme } = useStoreTheme((state) => state);
+
+  const lastItemRef = useRef<HTMLLIElement | null>(null);
+  const idFocus = useRef<string | null>(null);
+
+  const addItems: addItemsT = (flag) => (event?) => {
+    const parentElement = event?.currentTarget?.parentElement;
+
+    if (!parentElement) return; // Проверка на наличие родительского элемента
+
+    let targetId = null;
+
+    if (parentElement.classList.contains("parentSome")) {
+      // Если родительский элемент имеет класс "parentSome"
+      const lastChild = arrayInit.at(-1)?.children?.at(-1);
+      targetId = lastChild ? lastChild.id : null;
+    } else if (parentElement.tagName === "SPAN") {
+      // Если родительский элемент - это SPAN
+      const previousSibling =
+        parentElement.previousElementSibling as HTMLElement;
+      targetId = previousSibling ? previousSibling.innerText : null;
+    } else {
+      // Обработка других случаев
+      const children = parentElement.children;
+      if (children.length > 1) {
+        const secondLastChild = children[children.length - 2];
+        const span = secondLastChild.querySelector("span");
+        targetId = span ? span.innerText : null;
+      }
+    }
+
+    idFocus.current = targetId; // Устанавливаем idFocus.current
+
+    addItemsFunc(flag)(); // Возвращаем результат вызова addItemsFunc
+  };
+
+  useEffect(() => {
+    if (lastItemRef.current) {
+      lastItemRef.current.scrollIntoView(configScroll);
+    }
+  }, [arrayInit]);
 
   if (!arrayInit.length) {
     return <NoData addItem={addItems(undefined)} />;
@@ -19,7 +64,11 @@ const ListParseItems: FC = () => {
 
   const parseItems = (el: childrenT) => (
     <>
-      <S.Li $children={el.children} $idParents={el?.idParents}>
+      <S.Li
+        $children={el.children}
+        $idParents={el?.idParents}
+        ref={el.id === idFocus.current ? lastItemRef : null}
+      >
         <S.ParentS $children={el.children} $idParents={el?.idParents}>
           {el?.id}
         </S.ParentS>
