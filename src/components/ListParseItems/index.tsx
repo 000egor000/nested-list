@@ -103,14 +103,15 @@ const S = {
       !$idParents || $children ? "sticky" : "relative"};
     z-index: ${({ $idParents, $children }) =>
       $children ? $idParents?.split("-").join("") || 1 : "0"};
-    background-color: ${({ $idParents, $children }) =>
-      !$idParents || $children ? "white" : "none"};
     color: ${({ $theme }) => ($theme ? "black" : "inherit")};
-    width: ${({ $idParents, $children }) =>
-      !$idParents || $children ? "fit-content" : "auto"};
     border-bottom: ${({ $idParents, $children }) =>
       $idParents && !$children ? "1px solid transparent" : "none"};
     top: 0;
+
+    span:first-child {
+      background-color: ${({ $idParents, $children }) =>
+        !$idParents || $children ? "white" : "none"};
+    }
 
     &:last-child {
       border-bottom: none;
