@@ -14,42 +14,16 @@ const configScroll: ScrollIntoViewOptions = {
 const ListParseItems: FC = () => {
   const [animationParent] = useAutoAnimate();
   const arrayInit = useStore((state) => state.mokeData);
-  const addItemsFunc = useStore((state) => state.addItems);
-  const removeItems = useStore((state) => state.removeItems);
+  const idFocus = useStore((state) => state.idFocus);
+  const serchId = useStore((state) => state.searchId);
+  const addItemsFunc = useStore((state) => state.addItem);
+  const removeItems = useStore((state) => state.removeItem);
   const { theme } = useStoreTheme((state) => state);
 
   const lastItemRef = useRef<HTMLLIElement | null>(null);
-  const idFocus = useRef<string | null>(null);
-
   const addItems: addItemsT = (flag) => (event?) => {
-    const parentElement = event?.currentTarget?.parentElement;
-
-    if (!parentElement) return; // Проверка на наличие родительского элемента
-
-    let targetId = null;
-
-    if (parentElement.classList.contains("parentSome")) {
-      // Если родительский элемент имеет класс "parentSome"
-      const lastChild = arrayInit.at(-1)?.children?.at(-1);
-      targetId = lastChild ? lastChild.id : null;
-    } else if (parentElement.tagName === "SPAN") {
-      // Если родительский элемент - это SPAN
-      const previousSibling =
-        parentElement.previousElementSibling as HTMLElement;
-      targetId = previousSibling ? previousSibling.innerText : null;
-    } else {
-      // Обработка других случаев
-      const children = parentElement.children;
-      if (children.length > 1) {
-        const secondLastChild = children[children.length - 2];
-        const span = secondLastChild.querySelector("span");
-        targetId = span ? span.innerText : null;
-      }
-    }
-
-    idFocus.current = targetId; // Устанавливаем idFocus.current
-
-    addItemsFunc(flag)(); // Возвращаем результат вызова addItemsFunc
+    serchId(event);
+    addItemsFunc(flag)();
   };
 
   useEffect(() => {
@@ -67,7 +41,8 @@ const ListParseItems: FC = () => {
       <S.Li
         $children={el.children}
         $idParents={el?.idParents}
-        ref={el.id === idFocus.current ? lastItemRef : null}
+        $theme={theme}
+        ref={el.id === idFocus ? lastItemRef : null}
       >
         <S.ParentS $children={el.children} $idParents={el?.idParents}>
           {el?.id}
@@ -109,25 +84,37 @@ export default ListParseItems;
 const S = {
   Ul: styled.ul<{ $theme?: boolean }>`
     border: ${({ $theme }) => (!$theme ? "1px solid grey" : "1px solid white")};
-
     list-style-type: upper-roman;
     padding: 10px;
     margin: 0;
+    height: auto;
   `,
 
-  Li: styled.li<{ $idParents?: string; $children?: childrenT[] }>`
+  Li: styled.li<{
+    $idParents?: string;
+    $children?: childrenT[];
+    $theme?: boolean;
+  }>`
     display: flex;
     align-items: center;
     justify-content: space-between;
     border-image: linear-gradient(to right, red, green) 1;
+    position: ${({ $idParents, $children }) =>
+      !$idParents || $children ? "sticky" : "relative"};
+    z-index: ${({ $idParents }) => $idParents || "none"};
+    background-color: ${({ $idParents, $children }) =>
+      !$idParents || $children ? "white" : "none"};
+    color: ${({ $theme }) => $theme && "black"};
+    width: ${({ $idParents, $children }) =>
+      !$idParents || $children ? "fit-content" : "auto"};
     border-bottom: ${({ $idParents, $children }) =>
-      !$idParents || ($idParents && $children)
-        ? "none"
-        : "1px solid transparent"};
+      $idParents && !$children ? "1px solid transparent" : "none"};
+    top: 0;
     &:last-child {
       border-bottom: none;
     }
   `,
+
   ParentS: styled.span<{ $idParents?: string; $children?: childrenT[] }>`
     box-shadow: ${({ $idParents, $children }) =>
       (!$idParents || ($idParents && $children)) && "1px 1px 5px black"};

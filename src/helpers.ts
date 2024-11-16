@@ -1,4 +1,5 @@
-import { mokeDataT, childrenT } from "./App.types";
+import { mokeDataT, childrenT, getTargetIdT } from "./App.types";
+import { mokeData } from "./const";
 
 const funcRemove = (el: mokeDataT, arr: mokeDataT[]) =>
   arr.reduce((acc: mokeDataT[], curr) => {
@@ -75,7 +76,7 @@ const countParents = (arr: childrenT[]) => {
         res.Родители += 1;
         loop(el.children);
       } else {
-        if ((el.children && el.idParents)||(el.children || el.idParents)) {
+        if ((el.children && el.idParents) || el.children || el.idParents) {
           res.Дети += 1;
         }
       }
@@ -92,4 +93,24 @@ const handleClickRemove =
     return el ? funcRemove(el, arr) : arr;
   };
 
-export { handleClickAdd, handleClickRemove, countParents };
+// Вспомогательная функция для получения ID
+
+const getTargetId: getTargetIdT = (parentElement) => {
+  if (parentElement.classList.contains("parentSome")) {
+    const lastChild = mokeData.at(-1)?.children?.at(-1);
+    return lastChild ? lastChild.id : null;
+  } else if (parentElement.tagName === "SPAN") {
+    const previousSibling = parentElement.previousElementSibling as HTMLElement;
+    return previousSibling ? previousSibling.innerText : null;
+  } else {
+    const children = parentElement.children;
+    if (children.length > 1) {
+      const secondLastChild = children[children.length - 2];
+      const span = secondLastChild.querySelector("span");
+      return span ? span.innerText : null;
+    }
+  }
+  return null;
+};
+
+export { handleClickAdd, handleClickRemove, countParents, getTargetId };

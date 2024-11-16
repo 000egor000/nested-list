@@ -10,10 +10,14 @@ export type statisticInitT = {
 export type useStoreT = {
   mokeData: mokeDataT[];
   statistics: statisticInitT;
-  addItems: (el: childrenT | "newParent" | undefined) => () => void;
-  removeItems: (el: childrenT) => () => void;
+  idFocus: string | null;
+  updateState: (newData: mokeDataT[]) => void;
+  addItem: (el: childrenT | "newParent" | undefined) => () => void;
+  removeItem: (el: childrenT) => () => void;
   clearItems: () => void;
-  updateState: (el: mokeDataT[]) => void;
+  searchId: (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent> | undefined
+  ) => void;
 };
 
 export type useStoreThemeT = {
@@ -23,6 +27,7 @@ export type useStoreThemeT = {
 export type initialStateT = {
   mokeData: mokeDataT[];
   statistics: statisticInitT;
+  idFocus: string | null;
 };
 export type initialStateThemeT = {
   theme: boolean;
@@ -46,3 +51,5 @@ export type initThemeT = Record<string, { title: string; svg: JSX.Element }>;
 export type addItemsT = (
   flag: childrenT | "newParent" | undefined
 ) => (event?: React.MouseEvent<HTMLButtonElement>) => void;
+
+export type getTargetIdT = (parentElement: HTMLElement) => string | null;

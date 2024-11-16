@@ -7,17 +7,23 @@ import {
   initialStateT,
 } from "../App.types";
 
-import { handleClickAdd, handleClickRemove, countParents } from "../helpers";
+import {
+  handleClickAdd,
+  handleClickRemove,
+  countParents,
+  getTargetId,
+} from "../helpers";
 
 const initialState: initialStateT = {
   mokeData,
   statistics: countParents(mokeData) as unknown as statisticInitT,
+  idFocus: null,
 };
 
 const useStore = create<useStoreT>((set, get) => ({
   ...initialState,
 
-  // Вспомогательная функция для обновления состояния
+  // Обновление состояния с новыми данными
   updateState: (newData: typeof mokeData) => {
     set({
       mokeData: newData,
@@ -25,19 +31,32 @@ const useStore = create<useStoreT>((set, get) => ({
     });
   },
 
-  addItems: (el: childrenT | "newParent" | undefined) => () => {
-    const res = handleClickAdd(get().mokeData, el)();
-
-    get().updateState(res);
+  // Добавление элемента
+  addItem: (el: childrenT | "newParent" | undefined) => () => {
+    const newData = handleClickAdd(get().mokeData, el)();
+    get().updateState(newData);
   },
 
-  removeItems: (el: childrenT) => () => {
-    const res = handleClickRemove(get().mokeData, el)();
-    get().updateState(res);
+  // Удаление элемента
+  removeItem: (el: childrenT) => () => {
+    const newData = handleClickRemove(get().mokeData, el)();
+    get().updateState(newData);
   },
 
+  // Очистка всех элементов
   clearItems: () => {
     set({ mokeData: [], statistics: { Родители: "0", Дети: "0" } });
+  },
+
+  // Поиск ID
+  searchId: (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent> | undefined
+  ) => {
+    const parentElement = event?.currentTarget?.parentElement;
+    if (!parentElement) return;
+
+    const targetId = getTargetId(parentElement);
+    set({ idFocus: targetId });
   },
 }));
 
