@@ -55,7 +55,7 @@ const useStore = create<useStoreT>((set, get) => ({
     const parentElement = event?.currentTarget?.parentElement;
     if (!parentElement) return;
 
-    const targetId = getTargetId(parentElement);
+    const targetId = getTargetId(parentElement, get().mokeData);
     set({ idFocus: targetId });
   },
 }));

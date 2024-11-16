@@ -1,5 +1,4 @@
 import { mokeDataT, childrenT, getTargetIdT } from "./App.types";
-import { mokeData } from "./const";
 
 const funcRemove = (el: mokeDataT, arr: mokeDataT[]) =>
   arr.reduce((acc: mokeDataT[], curr) => {
@@ -95,10 +94,10 @@ const handleClickRemove =
 
 // Вспомогательная функция для получения ID
 
-const getTargetId: getTargetIdT = (parentElement) => {
+const getTargetId: getTargetIdT = (parentElement, arrayCurrent) => {
   if (parentElement.classList.contains("parentSome")) {
-    const lastChild = mokeData.at(-1)?.children?.at(-1);
-    return lastChild ? lastChild.id : null;
+    const lastChild = arrayCurrent.at(-1);
+    return lastChild ? String(+lastChild.id + 1) : null;
   } else if (parentElement.tagName === "SPAN") {
     const previousSibling = parentElement.previousElementSibling as HTMLElement;
     return previousSibling ? previousSibling.innerText : null;

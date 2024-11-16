@@ -52,4 +52,4 @@ export type addItemsT = (
   flag: childrenT | "newParent" | undefined
 ) => (event?: React.MouseEvent<HTMLButtonElement>) => void;
 
-export type getTargetIdT = (parentElement: HTMLElement) => string | null;
+export type getTargetIdT = (parentElement: HTMLElement,arrayCurrent:childrenT[]) => string | null;
