@@ -12,6 +12,7 @@ import {
   handleClickRemove,
   countParents,
   getTargetId,
+  generateMokeData,
 } from "../helpers";
 
 const initialState: initialStateT = {
@@ -29,6 +30,11 @@ const useStore = create<useStoreT>((set, get) => ({
       mokeData: newData,
       statistics: countParents(newData) as unknown as statisticInitT,
     });
+  },
+
+  // Обновление моков
+  generateMoke: () => {
+    get().updateState(generateMokeData(3));
   },
 
   // Добавление элемента

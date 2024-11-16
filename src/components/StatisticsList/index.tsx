@@ -7,6 +7,7 @@ const StatisticsList: FC = () => {
   const countParents = useStore((state) => state.statistics);
   const mokeData = useStore((state) => state.mokeData);
   const clearItems = useStore((state) => state.clearItems);
+  const generateMoke = useStore((state) => state.generateMoke);
   const isEmty = +countParents.Родители === 0 && !mokeData.length;
 
   return (
@@ -20,6 +21,8 @@ const StatisticsList: FC = () => {
       <S.Btn $isEmty={isEmty} onClick={clearItems} disabled={isEmty}>
         Сбросить
       </S.Btn>
+
+      <S.Btn onClick={generateMoke}>Сгенерить новые данные</S.Btn>
     </>
   );
 };
@@ -36,10 +39,11 @@ const S = {
     }
   `,
 
-  Btn: styled.button<{ $isEmty?: boolean }>`
+  Btn: styled.button<{ $isEmty?: boolean | undefined }>`
     padding: 5px 10px;
     margin: 5px;
-    background-color: #db7575;
+    background-color: ${({ $isEmty }) =>
+      $isEmty === undefined ? "green" : "#db7575"};
     border: none;
     border-radius: 10px;
     color: ${({ $isEmty }) => ($isEmty ? "white" : "inherit")};

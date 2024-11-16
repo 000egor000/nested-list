@@ -12,6 +12,7 @@ export type useStoreT = {
   statistics: statisticInitT;
   idFocus: string | null;
   updateState: (newData: mokeDataT[]) => void;
+  generateMoke: () => void;
   addItem: (el: childrenT | "newParent" | undefined) => () => void;
   removeItem: (el: childrenT) => () => void;
   clearItems: () => void;
@@ -52,4 +53,12 @@ export type addItemsT = (
   flag: childrenT | "newParent" | undefined
 ) => (event?: React.MouseEvent<HTMLButtonElement>) => void;
 
-export type getTargetIdT = (parentElement: HTMLElement,arrayCurrent:childrenT[]) => string | null;
+export type getTargetIdT = (
+  parentElement: HTMLElement,
+  arrayCurrent: childrenT[]
+) => string | null;
+
+export type generateMokeDataT = (
+  level: number,
+  parentId?: string
+) => mokeDataT[];

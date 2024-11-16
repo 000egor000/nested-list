@@ -1,4 +1,9 @@
-import { mokeDataT, childrenT, getTargetIdT } from "./App.types";
+import {
+  mokeDataT,
+  childrenT,
+  getTargetIdT,
+  generateMokeDataT,
+} from "./App.types";
 
 const funcRemove = (el: mokeDataT, arr: mokeDataT[]) =>
   arr.reduce((acc: mokeDataT[], curr) => {
@@ -112,4 +117,28 @@ const getTargetId: getTargetIdT = (parentElement, arrayCurrent) => {
   return null;
 };
 
-export { handleClickAdd, handleClickRemove, countParents, getTargetId };
+const generateMokeData: generateMokeDataT = (level, parentId = "") => {
+  const res: mokeDataT[] = [];
+
+  for (let i = 1; i <= level; i++) {
+    const id = parentId ? `${parentId}-${i}` : String(i);
+    const item: mokeDataT = { id };
+
+    if (Math.random() < 0.5 && level > 1) {
+      const childrenLevel = Math.floor(Math.random() * (level - 1)) + 1;
+      item.children = generateMokeData(childrenLevel, id);
+    }
+
+    res.push(item);
+  }
+
+  return res;
+};
+
+export {
+  handleClickAdd,
+  handleClickRemove,
+  countParents,
+  getTargetId,
+  generateMokeData,
+};
